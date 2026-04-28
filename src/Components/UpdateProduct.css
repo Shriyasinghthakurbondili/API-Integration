@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ── OVERLAY ─────────────────────────────────── */
+
+.up-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── MODAL ───────────────────────────────────── */
+
+.up-modal {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(160deg, #1a1535, #120f28);
+  border: 1px solid rgba(124, 111, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ── HEADER ──────────────────────────────────── */
+
+.up-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(124, 111, 255, 0.15);
+  background: rgba(124, 111, 255, 0.07);
+}
+
+.up-modal-title-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.up-modal-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 14px rgba(124,111,255,0.4);
+  flex-shrink: 0;
+}
+
+.up-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 2px;
+  font-family: "Poppins", sans-serif;
+}
+
+.up-subheading {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.up-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.up-close-btn:hover {
+  background: rgba(255,77,109,0.15);
+  border-color: rgba(255,77,109,0.3);
+  color: #ff8fa3;
+}
+
+/* ── FORM ────────────────────────────────────── */
+
+.up-form {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── IMAGE UPLOAD ────────────────────────────── */
+
+.up-upload-zone {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  border: 2px dashed rgba(124,111,255,0.5);
+  background: rgba(124,111,255,0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.up-upload-zone:hover {
+  border-color: #7c6fff;
+  background: rgba(124,111,255,0.15);
+}
+
+.up-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.up-upload-icon  { font-size: 2rem; }
+
+.up-upload-label {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.up-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.up-upload-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.up-upload-zone:hover .up-upload-overlay { opacity: 1; }
+
+/* ── FIELDS ──────────────────────────────────── */
+
+.up-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.up-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.up-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Override global input/textarea inside the modal */
+.up-form .input,
+.up-form .textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.up-form .input::placeholder,
+.up-form .textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.up-form .input:focus,
+.up-form .textarea:focus {
+  border-color: #7c6fff;
+  background: rgba(124, 111, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.2);
+}
+
+/* ── ACTIONS ─────────────────────────────────── */
+
+.up-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+/* BASE BUTTON */
+.update-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.update-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
+.update-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* SAVE BUTTON */
+.update-btn-save {
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 18px rgba(124,111,255,0.35);
+}
+
+.update-btn-save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,111,255,0.5);
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  color: #ffffff;
+}
+
+.update-btn-save:active { transform: translateY(0); }
+
+/* EDIT TRIGGER */
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 9px;
+  border: 1px solid rgba(124,111,255,0.35);
+  background: rgba(124,111,255,0.12);
+  color: #b3acff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: static;
+  width: auto;
+  height: auto;
+}
+
+.edit-btn:hover {
+  background: rgba(124,111,255,0.22);
+  border-color: rgba(124,111,255,0.6);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(124,111,255,0.3);
+}
+
+/* SPINNER */
+.up-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,382 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── PAGE ────────────────────────────────────── */
+
+.profile-page {
+  padding: 36px 0 64px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ── HERO CARD ───────────────────────────────── */
+
+.profile-hero {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid rgba(124,111,255,0.2);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+.profile-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 120% at 10% 50%, rgba(124,111,255,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 100% at 90% 20%, rgba(180,80,255,0.25) 0%, transparent 55%),
+    linear-gradient(135deg, #13102a 0%, #0d0b1e 100%);
+  z-index: 0;
+}
+
+.profile-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 36px 36px;
+  flex-wrap: wrap;
+}
+
+/* AVATAR */
+.profile-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 8px 28px rgba(124,111,255,0.5);
+  border: 3px solid rgba(255,255,255,0.15);
+  text-transform: uppercase;
+}
+
+/* USER INFO */
+.profile-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.profile-email {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  background: rgba(255,180,0,0.15);
+  border: 1px solid rgba(255,180,0,0.35);
+  color: #ffc94d;
+}
+
+.role-user {
+  background: rgba(46,204,154,0.12);
+  border: 1px solid rgba(46,204,154,0.3);
+  color: #2ecc9a;
+}
+
+/* LOGOUT BUTTON in hero */
+.profile-logout-btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,77,109,0.35);
+  background: rgba(255,77,109,0.1);
+  color: #ff8fa3;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.profile-logout-btn:hover {
+  background: linear-gradient(135deg, #ff4d6d, #ff6b8a);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(255,77,109,0.4);
+  transform: translateY(-2px);
+}
+
+/* ── STATS ROW ───────────────────────────────── */
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  .profile-stats { grid-template-columns: 1fr 1fr; }
+}
+
+.stat-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: rgba(124,111,255,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.stat-icon-orders   { background: rgba(124,111,255,0.15); border: 1px solid rgba(124,111,255,0.25); }
+.stat-icon-cart     { background: rgba(46,204,154,0.12);  border: 1px solid rgba(46,204,154,0.25);  }
+.stat-icon-spent    { background: rgba(255,180,0,0.12);   border: 1px solid rgba(255,180,0,0.25);   }
+
+.stat-info { min-width: 0; }
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+}
+
+/* ── LAYOUT ──────────────────────────────────── */
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .profile-layout { grid-template-columns: 1fr; }
+}
+
+/* ── INFO CARD ───────────────────────────────── */
+
+.profile-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.profile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(124,111,255,0.15);
+  background: rgba(124,111,255,0.06);
+}
+
+.profile-card-icon {
+  font-size: 1.1rem;
+}
+
+.profile-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #b3acff;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.profile-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* INFO ROW */
+.profile-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.profile-info-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-info-label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.38);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-info-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  text-align: right;
+  word-break: break-all;
+}
+
+.profile-info-value.highlight {
+  color: #b3acff;
+}
+
+/* ── RECENT ORDERS ───────────────────────────── */
+
+.profile-recent-order {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 8px;
+  padding-inline: 8px;
+}
+
+.profile-recent-order:last-child { border-bottom: none; }
+
+.profile-recent-order:hover { background: rgba(124,111,255,0.07); }
+
+.pro-order-id {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #b3acff;
+  font-family: monospace;
+}
+
+.pro-order-date {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  margin-top: 2px;
+}
+
+.pro-order-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.pro-order-total {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+/* EMPTY ORDERS */
+.profile-no-orders {
+  text-align: center;
+  padding: 28px 16px;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.85rem;
+}
+
+.profile-no-orders span {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+/* ── QUICK ACTIONS ───────────────────────────── */
+
+.profile-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.profile-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.7);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.profile-action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.profile-action-btn .action-icon { font-size: 1.5rem; }
+
+.action-orders  { border-color: rgba(124,111,255,0.25); }
+.action-orders:hover  { background: rgba(124,111,255,0.12); border-color: rgba(124,111,255,0.4); color: #b3acff; }
+
+.action-cart    { border-color: rgba(46,204,154,0.2); }
+.action-cart:hover    { background: rgba(46,204,154,0.1);  border-color: rgba(46,204,154,0.4);  color: #2ecc9a; }
+
+.action-shop    { border-color: rgba(30,160,255,0.2); }
+.action-shop:hover    { background: rgba(30,160,255,0.1);  border-color: rgba(30,160,255,0.4);  color: #6ec6ff; }
+
+.action-logout  { border-color: rgba(255,77,109,0.2); }
+.action-logout:hover  { background: rgba(255,77,109,0.1);  border-color: rgba(255,77,109,0.4);  color: #ff8fa3; }

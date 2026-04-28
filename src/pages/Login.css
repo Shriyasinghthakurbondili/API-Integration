@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* MAIN CONTAINER */
+.login-container {
+  display: flex;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+/* LEFT SIDE IMAGE */
+.login-left {
+  flex: 1.1;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.03);
+  transition: transform 8s ease;
+}
+
+.login-left img:hover {
+  transform: scale(1.08);
+}
+
+.login-left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 10, 40, 0.55) 0%,
+    rgba(108, 99, 255, 0.25) 100%
+  );
+}
+
+.login-left-overlay {
+  position: absolute;
+  bottom: 48px;
+  left: 44px;
+  z-index: 2;
+  color: white;
+}
+
+.login-left-overlay h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 10px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.login-left-overlay p {
+  font-size: 1rem;
+  font-weight: 300;
+  opacity: 0.88;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+/* RIGHT SIDE */
+.login-right {
+  flex: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(160deg, #0f0a28 0%, #1a1040 60%, #0d0d1a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glow blobs */
+.login-right::before {
+  content: '';
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(108, 99, 255, 0.18) 0%, transparent 70%);
+  top: -80px;
+  right: -80px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-right::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 99, 180, 0.1) 0%, transparent 70%);
+  bottom: -60px;
+  left: -60px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* LOGIN BOX */
+.login-box {
+  width: 400px;
+  padding: 48px 44px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  text-align: center;
+  backdrop-filter: blur(18px);
+  position: relative;
+  z-index: 1;
+}
+
+/* LOGO / BRAND */
+.login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.login-brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #6c63ff, #ff63b8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.login-brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* HEADINGS */
+.login-box h2 {
+  margin: 0 0 6px;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.login-box > p {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 28px;
+  font-size: 0.9rem;
+}
+
+/* INPUT WRAPPER */
+.input-group {
+  position: relative;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 6px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* INPUT FIELDS */
+.login-box input {
+  width: 100%;
+  padding: 13px 16px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.92rem;
+  box-sizing: border-box;
+}
+
+.login-box input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.login-box input:focus {
+  border-color: #6c63ff;
+  background: rgba(108, 99, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.18);
+}
+
+/* FORGOT PASSWORD */
+.forgot-password {
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.forgot-password span {
+  font-size: 0.8rem;
+  color: #a89cff;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.forgot-password span:hover {
+  color: #6c63ff;
+}
+
+/* BUTTON */
+.login-box button {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #6c63ff 0%, #9b59ff 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 0.4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-box button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.login-box button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(108, 99, 255, 0.55);
+}
+
+.login-box button:hover::before {
+  opacity: 1;
+}
+
+.login-box button:active {
+  transform: translateY(0);
+}
+
+/* DIVIDER */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+
+.login-divider span {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.35);
+  white-space: nowrap;
+}
+
+/* SIGNUP TEXT */
+.signup-text {
+  margin-top: 22px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.signup-text span {
+  color: #a89cff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.signup-text span:hover {
+  color: #6c63ff;
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    flex: 1;
+  }
+
+  .login-box {
+    width: 90%;
+    padding: 36px 28px;
+  }
+}
