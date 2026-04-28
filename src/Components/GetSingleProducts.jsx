@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { useParams, useNavigate } from "react-router-dom"
-import { fetchSingleProduct } from '../Slices/ProductSlice'
+import { fetchSingleProduct } from '../Slices/productSlice'
 import { addToCart } from '../Slices/cartSlice'
 import { toast } from "react-hot-toast"
 import TopNav from "./TopNav"

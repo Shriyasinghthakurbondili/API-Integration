@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { createPortal } from "react-dom"
 import { useDispatch } from "react-redux"
-import { updateProduct, fetchProducts } from "../Slices/ProductSlice"
+import { updateProduct, fetchProducts } from "../Slices/productSlice"
 import { toast } from "react-hot-toast"
 import "./UpdateProduct.css"
 

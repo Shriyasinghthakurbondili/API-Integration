@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { addProduct, fetchProducts } from "../Slices/ProductSlice"
+import { addProduct, fetchProducts } from "../Slices/productSlice"
 import { toast } from "react-hot-toast"
 import "./AddNewProduct.css"
 

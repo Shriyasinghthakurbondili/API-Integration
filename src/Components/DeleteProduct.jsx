@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { deleteProduct, fetchProducts } from "../Slices/ProductSlice"
+import { deleteProduct, fetchProducts } from "../Slices/productSlice"
 import "./DeleteProduct.css"
 
 const DeleteProduct = ({ id }) => {
