@@ -1,0 +1,398 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── PAGE ────────────────────────────────────── */
+
+.addr-page {
+  padding: 36px 0 64px;
+  font-family: "Poppins", sans-serif;
+}
+
+.addr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.addr-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+
+.addr-subtitle {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+}
+
+/* ADD BUTTON */
+.addr-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 18px rgba(124,111,255,0.4);
+  flex-shrink: 0;
+}
+
+.addr-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(124,111,255,0.5);
+}
+
+/* ── ADDRESS GRID ────────────────────────────── */
+
+.addr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* ADDRESS CARD */
+.addr-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.addr-card:hover {
+  border-color: rgba(124,111,255,0.25);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.35);
+}
+
+.addr-card.addr-card-default {
+  border-color: rgba(124,111,255,0.4);
+  box-shadow: 0 0 0 1px rgba(124,111,255,0.2);
+}
+
+/* DEFAULT BADGE */
+.addr-default-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(124,111,255,0.15);
+  border: 1px solid rgba(124,111,255,0.35);
+  color: #b3acff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* CARD BODY */
+.addr-card-body {
+  padding: 20px;
+}
+
+.addr-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 10px;
+}
+
+.addr-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+
+.addr-line {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  margin: 0 0 4px;
+}
+
+.addr-phone {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  margin: 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* CARD FOOTER */
+.addr-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.02);
+  flex-wrap: wrap;
+}
+
+.addr-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+}
+
+.addr-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
+.addr-btn-default {
+  border-color: rgba(124,111,255,0.3);
+  background: rgba(124,111,255,0.08);
+  color: #b3acff;
+}
+
+.addr-btn-default:hover {
+  background: rgba(124,111,255,0.18);
+  color: #ffffff;
+}
+
+.addr-btn-delete {
+  border-color: rgba(255,77,109,0.25);
+  background: rgba(255,77,109,0.07);
+  color: #ff8fa3;
+  margin-left: auto;
+}
+
+.addr-btn-delete:hover {
+  background: rgba(255,77,109,0.18);
+  color: #ffffff;
+}
+
+/* ── EMPTY STATE ─────────────────────────────── */
+
+.addr-empty {
+  text-align: center;
+  padding: 72px 32px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+}
+
+.addr-empty-icon { font-size: 3rem; margin-bottom: 14px; }
+
+.addr-empty h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.addr-empty p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0 0 22px;
+}
+
+/* ── MODAL OVERLAY ───────────────────────────── */
+
+.addr-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: addrFadeIn 0.2s ease;
+}
+
+@keyframes addrFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── MODAL ───────────────────────────────────── */
+
+.addr-modal {
+  width: 100%;
+  max-width: 500px;
+  background: linear-gradient(160deg, #1a1535, #120f28);
+  border: 1px solid rgba(124,111,255,0.25);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  overflow: hidden;
+  animation: addrSlideUp 0.25s ease;
+}
+
+@keyframes addrSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.addr-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(124,111,255,0.15);
+  background: rgba(124,111,255,0.07);
+}
+
+.addr-modal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.addr-modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.addr-modal-close:hover {
+  background: rgba(255,77,109,0.15);
+  border-color: rgba(255,77,109,0.3);
+  color: #ff8fa3;
+}
+
+/* FORM */
+.addr-form {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.addr-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.addr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.addr-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+}
+
+.addr-input, .addr-select {
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.addr-input::placeholder { color: rgba(255,255,255,0.28); }
+
+.addr-input:focus, .addr-select:focus {
+  border-color: #7c6fff;
+  background: rgba(124,111,255,0.1);
+  box-shadow: 0 0 0 3px rgba(124,111,255,0.18);
+}
+
+.addr-select option { background: #1a1535; color: #ffffff; }
+
+/* FORM ACTIONS */
+.addr-form-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.addr-cancel-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.addr-cancel-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
+.addr-save-btn {
+  flex: 1;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(124,111,255,0.35);
+}
+
+.addr-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,111,255,0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 500px) {
+  .addr-form-row { grid-template-columns: 1fr; }
+}

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
 const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://apis-17.onrender.com"
+  import.meta.env.VITE_API_URL || "https://blog-apis-6x3t.onrender.com"
 
 function decodeJwt(token) {
   try {
@@ -54,7 +54,7 @@ export const registerUser = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${BASE_URL}/api/userRoutes/register`, {
+      const res = await fetch(`${BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData)
@@ -82,7 +82,7 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${BASE_URL}/api/userRoutes/login`, {
+      const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData)

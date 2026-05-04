@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { useParams, useNavigate } from "react-router-dom"
-import { fetchSingleProduct } from '../Slices/productSlice'
+import { fetchSingleProduct, resolveImage, getFallbackImage } from '../Slices/productSlice'
 import { addToCart } from '../Slices/cartSlice'
 import { toast } from "react-hot-toast"
 import TopNav from "./TopNav"
@@ -83,11 +83,20 @@ const GetSingleProducts = () => {
 
             {/* LEFT — IMAGE */}
             <div className="sp-image-side">
-              {singleProduct.image?.url ? (
-                <img src={singleProduct.image.url} alt={singleProduct.title} />
-              ) : (
-                <div className="sp-no-image">📦</div>
-              )}
+              {(() => {
+                const imgSrc = resolveImage(singleProduct.image, singleProduct.title, singleProduct.category)
+                return (
+                  <img
+                    src={imgSrc}
+                    alt={singleProduct.title}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.src = getFallbackImage(singleProduct.title, singleProduct.category)
+                    }}
+                  />
+                )
+              })()}
             </div>
 
             {/* RIGHT — DETAILS */}

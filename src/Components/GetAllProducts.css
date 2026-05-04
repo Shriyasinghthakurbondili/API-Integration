@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ── FILTER BAR ──────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* SEARCH */
+.filter-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.filter-search {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.filter-search::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+.filter-search:focus {
+  border-color: #7c6fff;
+  background: rgba(124, 111, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.15);
+}
+
+.filter-clear-x {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.2s;
+}
+
+.filter-clear-x:hover { color: #ff8fa3; }
+
+/* SELECT */
+.filter-select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.filter-select:focus {
+  border-color: #7c6fff;
+  background: rgba(124, 111, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.15);
+}
+
+.filter-select option {
+  background: #1a1535;
+  color: #ffffff;
+}
+
+/* PRICE RANGE */
+.filter-price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-price-input {
+  width: 110px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.filter-price-input::placeholder { color: rgba(255, 255, 255, 0.28); }
+
+.filter-price-input:focus {
+  border-color: #7c6fff;
+  background: rgba(124, 111, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.15);
+}
+
+/* Remove number input arrows */
+.filter-price-input::-webkit-outer-spin-button,
+.filter-price-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.filter-price-input[type=number] { -moz-appearance: textfield; }
+
+.filter-price-sep {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.85rem;
+}
+
+/* CLEAR ALL BUTTON */
+.filter-clear-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  background: rgba(255, 77, 109, 0.08);
+  color: #ff8fa3;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.filter-clear-btn:hover {
+  background: rgba(255, 77, 109, 0.18);
+  color: #ffffff;
+}
+
+/* ── RESULTS ROW ─────────────────────────────── */
+
+.filter-results-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.filter-results-count {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: "Poppins", sans-serif;
+}
+
+.filter-active-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(124, 111, 255, 0.12);
+  border: 1px solid rgba(124, 111, 255, 0.25);
+  color: #b3acff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-search-wrap { min-width: unset; }
+  .filter-select      { min-width: unset; }
+
+  .filter-price-wrap {
+    width: 100%;
+  }
+
+  .filter-price-input { flex: 1; width: auto; }
+}
+
+/* ── PAGINATION ──────────────────────────────── */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(124,111,255,0.15);
+  border-color: rgba(124,111,255,0.35);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.page-btn.active {
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(124,111,255,0.4);
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.page-btn-nav {
+  width: auto;
+  padding: 0 14px;
+  font-size: 0.8rem;
+}
+
+.page-info {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  font-family: "Poppins", sans-serif;
+  padding: 0 8px;
+}

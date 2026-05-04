@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { fetchOrders } from "../Slices/orderSlice"
+import { resolveImage, getFallbackImage } from "../Slices/productSlice"
 import TopNav from "../Components/TopNav"
 import "./Orders.css"
 
@@ -120,17 +121,21 @@ const Orders = () => {
                           const p = item.product || item
                           const isObj = p && typeof p === "object"
                           const name  = isObj ? (p.title || p.name || "Product") : "Product"
-                          const img   = isObj ? (p.image?.url || p.image || "") : ""
+                          const imgSrc = resolveImage(isObj ? p.image : null, name)
                           const price = item.price ?? (isObj ? p.price : 0) ?? 0
                           const qty   = item.quantity ?? item.qty ?? 1
 
                           return (
                             <div key={idx} className="order-item-row">
-                              {img ? (
-                                <img className="order-item-img" src={img} alt={name} />
-                              ) : (
-                                <div className="order-item-img-placeholder">📦</div>
-                              )}
+                              <img
+                                className="order-item-img"
+                                src={imgSrc}
+                                alt={name}
+                                onError={(e) => {
+                                  e.target.onerror = null
+                                  e.target.src = getFallbackImage(name)
+                                }}
+                              />
                               <div className="order-item-info">
                                 <p className="order-item-name">{name}</p>
                                 <p className="order-item-qty">Qty: {qty}</p>
@@ -148,6 +153,18 @@ const Orders = () => {
                     <div className="order-card-footer">
                       <span className="order-total-label">Order Total</span>
                       <span className="order-total-price">₹ {Number(total).toLocaleString()}</span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); navigate(`/track/${order._id}`) }}
+                        style={{
+                          marginLeft: "auto", padding: "6px 16px",
+                          borderRadius: 8, border: "1px solid rgba(46,204,154,0.3)",
+                          background: "rgba(46,204,154,0.1)", color: "#2ecc9a",
+                          fontFamily: "Poppins,sans-serif", fontSize: "0.78rem",
+                          fontWeight: 600, cursor: "pointer"
+                        }}
+                      >
+                        🗺️ Track
+                      </button>
                     </div>
 
                   </div>

@@ -363,6 +363,41 @@
   font-weight: 600;
 }
 
+/* ── HELP CARD ───────────────────────────────── */
+
+.od-help-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.od-help-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.od-help-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.83rem;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.od-help-row:last-child { border-bottom: none; }
+
+.od-help-row:hover { color: #b3acff; }
+
 /* ── SHOP BUTTON ─────────────────────────────── */
 
 .od-shop-btn {

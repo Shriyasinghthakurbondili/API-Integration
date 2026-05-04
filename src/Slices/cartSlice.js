@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const BASE_URL = `${import.meta.env.VITE_API_URL || "https://apis-17.onrender.com"}/api/cartRoutes`
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
+
+const CART_URL        = `${API_URL}/api/cart`
+const CART_REMOVE_URL = (id) => `${API_URL}/api/cart/${id}`  // DELETE :productId in URL params
 
 async function safeBody(res) {
   try { return await res.json() }
@@ -15,20 +18,21 @@ function authHeader(token) {
 }
 
 async function refetchCart(token) {
-  const res = await fetch(`${BASE_URL}/cart`, {
+  const res = await fetch(CART_URL, {
     headers: { Authorization: `Bearer ${token}` },
   })
   const data = await safeBody(res)
   if (!res.ok) throw new Error(data.message || "Failed to fetch cart")
-  const rawItems = data.cart?.items ?? []
+  const rawItems = data.cart?.items ?? data.items ?? []
   return rawItems.map((item) => {
     const p = item.product
-    const isPopulated = p && typeof p === "object"
+    const isPopulated = p && typeof p === "object" && !Array.isArray(p)
     return {
       productId: isPopulated ? (p._id || p.id) : String(p),
       name:      isPopulated ? (p.title || p.name || "Product") : "Product",
       price:     isPopulated ? (p.price ?? 0) : 0,
-      image:     isPopulated ? (p.image?.url || p.image || "") : "",
+      image:     isPopulated ? (p.image?.url || p.image) : null,
+      stock:     isPopulated ? (p.stock ?? 999) : 999,
       quantity:  item.quantity ?? 1,
     }
   })
@@ -47,12 +51,14 @@ export const fetchCart = createAsyncThunk(
   }
 )
 
+// Backend: POST /api/cart  { productId, quantity }
+// existingItem.quantity += quantity  →  always adds to existing qty
 export const addToCart = createAsyncThunk(
   "cart/add",
   async ({ productId, quantity = 1 }, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/cart`, {
+      const res = await fetch(CART_URL, {
         method: "POST",
         headers: authHeader(token),
         body: JSON.stringify({ productId, quantity }),
@@ -66,15 +72,15 @@ export const addToCart = createAsyncThunk(
   }
 )
 
+// Backend: DELETE /api/cart/:productId  (id in URL params)
 export const removeFromCart = createAsyncThunk(
   "cart/remove",
   async (productId, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/cart/item`, {
+      const res = await fetch(CART_REMOVE_URL(productId), {
         method: "DELETE",
-        headers: authHeader(token),
-        body: JSON.stringify({ productId }),
+        headers: { Authorization: `Bearer ${token}` },
       })
       const data = await safeBody(res)
       if (!res.ok) return rejectWithValue(data.message || "Failed to remove item")
@@ -85,15 +91,16 @@ export const removeFromCart = createAsyncThunk(
   }
 )
 
+// Backend does += quantity, so sending quantity: 1 adds exactly 1
 export const incrementQuantity = createAsyncThunk(
   "cart/increment",
   async (productId, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/cart/quantity`, {
-        method: "PATCH",
+      const res = await fetch(CART_URL, {
+        method: "POST",
         headers: authHeader(token),
-        body: JSON.stringify({ productId, action: "inc" }),
+        body: JSON.stringify({ productId, quantity: 1 }),
       })
       const data = await safeBody(res)
       if (!res.ok) return rejectWithValue(data.message || "Failed to update quantity")
@@ -104,15 +111,33 @@ export const incrementQuantity = createAsyncThunk(
   }
 )
 
+// Backend does += quantity, so sending quantity: -1 decrements by 1
+// If already at 1, remove the item entirely instead
 export const decrementQuantity = createAsyncThunk(
   "cart/decrement",
   async (productId, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/cart/quantity`, {
-        method: "PATCH",
+      const { items } = getState().cart
+      const item = items.find((i) => i.productId === productId)
+      const currentQty = item?.quantity || 1
+
+      if (currentQty <= 1) {
+        // Remove item entirely
+        const res = await fetch(CART_REMOVE_URL(productId), {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        const data = await safeBody(res)
+        if (!res.ok) return rejectWithValue(data.message || "Failed to remove item")
+        return await refetchCart(token)
+      }
+
+      // Decrement by 1 using negative quantity
+      const res = await fetch(CART_URL, {
+        method: "POST",
         headers: authHeader(token),
-        body: JSON.stringify({ productId, action: "dec" }),
+        body: JSON.stringify({ productId, quantity: -1 }),
       })
       const data = await safeBody(res)
       if (!res.ok) return rejectWithValue(data.message || "Failed to update quantity")
@@ -128,7 +153,7 @@ export const clearCart = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/cart`, {
+      const res = await fetch(CART_URL, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -148,37 +173,72 @@ const cartSlice = createSlice({
   initialState: {
     items: [],
     loading: false,
-    actionLoading: false,
+    actionLoading: false,   // for checkout / clear cart
+    loadingItems: {},       // { [productId]: true } — per-item loading
     error: null,
   },
   reducers: {
     clearCartError: (state) => { state.error = null },
-    resetCart: (state) => { state.items = [] },   // instant local clear
+    resetCart:      (state) => { state.items = []; state.loadingItems = {} },
   },
   extraReducers: (builder) => {
-    const onPending   = (state)         => { state.actionLoading = true;  state.error = null }
-    const onFulfilled = (state, action) => { state.actionLoading = false; state.items = action.payload }
-    const onRejected  = (state, action) => { state.actionLoading = false; state.error = action.payload }
-
     builder
-      .addCase(fetchCart.pending,          (state)         => { state.loading = true;  state.error = null })
-      .addCase(fetchCart.fulfilled,        (state, action) => { state.loading = false; state.items = action.payload })
-      .addCase(fetchCart.rejected,         (state, action) => { state.loading = false; state.error = action.payload })
-      .addCase(addToCart.pending,          onPending)
-      .addCase(addToCart.fulfilled,        onFulfilled)
-      .addCase(addToCart.rejected,         onRejected)
-      .addCase(removeFromCart.pending,     onPending)
-      .addCase(removeFromCart.fulfilled,   onFulfilled)
-      .addCase(removeFromCart.rejected,    onRejected)
-      .addCase(incrementQuantity.pending,  onPending)
-      .addCase(incrementQuantity.fulfilled,onFulfilled)
-      .addCase(incrementQuantity.rejected, onRejected)
-      .addCase(decrementQuantity.pending,  onPending)
-      .addCase(decrementQuantity.fulfilled,onFulfilled)
-      .addCase(decrementQuantity.rejected, onRejected)
-      .addCase(clearCart.pending,          onPending)
-      .addCase(clearCart.fulfilled,        onFulfilled)
-      .addCase(clearCart.rejected,         onRejected)
+      // ── fetchCart ──────────────────────────────────────────────────────────
+      .addCase(fetchCart.pending,   (state)         => { state.loading = true;  state.error = null })
+      .addCase(fetchCart.fulfilled, (state, action) => { state.loading = false; state.items = action.payload })
+      .addCase(fetchCart.rejected,  (state, action) => { state.loading = false; state.error = action.payload })
+
+      // ── addToCart ──────────────────────────────────────────────────────────
+      .addCase(addToCart.pending,   (state)         => { state.actionLoading = true;  state.error = null })
+      .addCase(addToCart.fulfilled, (state, action) => { state.actionLoading = false; state.items = action.payload })
+      .addCase(addToCart.rejected,  (state, action) => { state.actionLoading = false; state.error = action.payload })
+
+      // ── removeFromCart ─────────────────────────────────────────────────────
+      .addCase(removeFromCart.pending,   (state, action) => {
+        state.loadingItems[action.meta.arg] = true
+        state.error = null
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.items = action.payload
+      })
+      .addCase(removeFromCart.rejected,  (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.error = action.payload
+      })
+
+      // ── incrementQuantity ──────────────────────────────────────────────────
+      .addCase(incrementQuantity.pending,   (state, action) => {
+        state.loadingItems[action.meta.arg] = true
+        state.error = null
+      })
+      .addCase(incrementQuantity.fulfilled, (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.items = action.payload
+      })
+      .addCase(incrementQuantity.rejected,  (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.error = action.payload
+      })
+
+      // ── decrementQuantity ──────────────────────────────────────────────────
+      .addCase(decrementQuantity.pending,   (state, action) => {
+        state.loadingItems[action.meta.arg] = true
+        state.error = null
+      })
+      .addCase(decrementQuantity.fulfilled, (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.items = action.payload
+      })
+      .addCase(decrementQuantity.rejected,  (state, action) => {
+        delete state.loadingItems[action.meta.arg]
+        state.error = action.payload
+      })
+
+      // ── clearCart ──────────────────────────────────────────────────────────
+      .addCase(clearCart.pending,   (state)         => { state.actionLoading = true;  state.error = null })
+      .addCase(clearCart.fulfilled, (state, action) => { state.actionLoading = false; state.items = action.payload })
+      .addCase(clearCart.rejected,  (state, action) => { state.actionLoading = false; state.error = action.payload })
   },
 })
 

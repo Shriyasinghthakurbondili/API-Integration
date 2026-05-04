@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { createPortal } from "react-dom"
 import { useDispatch } from "react-redux"
-import { updateProduct, fetchProducts } from "../Slices/productSlice"
+import { updateProduct, fetchProducts, resolveImage } from "../Slices/productSlice"
 import { toast } from "react-hot-toast"
 import "./UpdateProduct.css"
 
 const UpdateProduct = ({ product }) => {
   const dispatch = useDispatch()
+
+  const getPreview = () => resolveImage(product.image, product.title, product.category)
 
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -14,7 +16,7 @@ const UpdateProduct = ({ product }) => {
   const [description, setDescription] = useState(product.description)
   const [price, setPrice] = useState(product.price)
   const [image, setImage] = useState(null)
-  const [preview, setPreview] = useState(product.image?.url || null)
+  const [preview, setPreview] = useState(null)
 
   const handleImage = (e) => {
     const file = e.target.files[0]
@@ -26,7 +28,7 @@ const UpdateProduct = ({ product }) => {
   const handleClose = () => {
     setOpen(false)
     setImage(null)
-    setPreview(product.image?.url || null)
+    setPreview(null)
     setTitle(product.title)
     setDescription(product.description)
     setPrice(product.price)
@@ -59,40 +61,45 @@ const UpdateProduct = ({ product }) => {
 
   return (
     <>
-      <button className="btn up-btn-edit" onClick={() => setOpen(true)}>
+      <button className="edit-btn" onClick={() => setOpen(true)}>
         ✏️ Edit
       </button>
 
       {open && createPortal(
-        <div className="modal-overlay" onClick={handleClose}>
-          <div className="modal up-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="up-overlay" onClick={handleClose}>
+          <div className="up-modal" onClick={(e) => e.stopPropagation()}>
 
             {/* Header */}
-            <div className="modal-header">
-              <div className="up-modal-title">
+            <div className="up-modal-header">
+              <div className="up-modal-title-block">
                 <div className="up-modal-icon">✏️</div>
                 <div>
                   <h2 className="up-heading">Edit Product</h2>
                   <p className="up-subheading">Update the details below</p>
                 </div>
               </div>
-              <button className="close-btn" onClick={handleClose}>✕</button>
+              <button className="up-close-btn" onClick={handleClose} aria-label="Close">✕</button>
             </div>
 
             <form className="up-form" onSubmit={handleSubmit}>
 
               {/* Image upload */}
               <label className="up-upload-zone" htmlFor="up-file-input">
-                {preview ? (
-                  <img src={preview} alt="preview" className="up-preview" />
+                {(preview || getPreview()) ? (
+                  <>
+                    <img
+                      src={preview || getPreview()}
+                      alt="preview"
+                      className="up-preview"
+                      onError={(e) => { e.target.style.display = "none" }}
+                    />
+                    <div className="up-upload-overlay">🖼️ Change image</div>
+                  </>
                 ) : (
                   <div className="up-upload-placeholder">
                     <span className="up-upload-icon">🖼️</span>
                     <span className="up-upload-label">Click to change image</span>
                   </div>
-                )}
-                {preview && (
-                  <div className="up-upload-overlay">Change image</div>
                 )}
                 <input
                   id="up-file-input"
@@ -113,6 +120,7 @@ const UpdateProduct = ({ product }) => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Product title"
+                    maxLength={120}
                   />
                 </div>
 
@@ -125,11 +133,12 @@ const UpdateProduct = ({ product }) => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Product description"
+                    maxLength={500}
                   />
                 </div>
 
                 <div className="up-field">
-                  <label className="up-label" htmlFor="up-price">Price ($)</label>
+                  <label className="up-label" htmlFor="up-price">Price (₹)</label>
                   <input
                     id="up-price"
                     className="input"
@@ -145,18 +154,19 @@ const UpdateProduct = ({ product }) => {
 
               {/* Actions */}
               <div className="up-actions">
-                <button type="button" className="btn up-btn-cancel" onClick={handleClose}>
+                <button type="button" className="update-btn" onClick={handleClose} disabled={loading}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary up-btn-save" disabled={loading}>
+                <button type="submit" className="update-btn update-btn-save" disabled={loading}>
                   {loading ? <span className="up-spinner" /> : "Save Changes"}
                 </button>
               </div>
 
             </form>
           </div>
-        </div>
-      , document.body)}
+        </div>,
+        document.body
+      )}
     </>
   )
 }

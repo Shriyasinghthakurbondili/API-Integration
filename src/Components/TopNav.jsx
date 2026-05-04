@@ -8,8 +8,13 @@ const TopNav = ({ title = "Ecommerce" }) => {
   const dispatch = useDispatch()
 
   const { token } = useSelector((state) => state.auth || {})
+
   const cartCount = useSelector((state) =>
     state.cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0
+  )
+
+  const wishlistCount = useSelector((state) =>
+    state.wishlist?.items?.length || 0
   )
 
   const handleLogout = () => {
@@ -34,9 +39,22 @@ const TopNav = ({ title = "Ecommerce" }) => {
             Home
           </button>
 
+          {/* WISHLIST */}
+          {token && (
+            <button className="btn btn-cart" onClick={() => navigate("/wishlist")}>
+              🤍 Wishlist
+              {wishlistCount > 0 && (
+                <span className="cart-badge" style={{ background: "linear-gradient(135deg,#ff4d6d,#ff6b8a)" }}>
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* CART */}
           {token && (
             <button className="btn btn-cart" onClick={() => navigate("/cart")}>
-              🛒
+              🛒 Cart
               {cartCount > 0 && (
                 <span className="cart-badge">{cartCount}</span>
               )}
@@ -51,7 +69,13 @@ const TopNav = ({ title = "Ecommerce" }) => {
 
           {token && (
             <button className="btn btn-ghost" onClick={() => navigate("/profile")}>
-              👤
+              👤 Profile
+            </button>
+          )}
+
+          {token && (
+            <button className="btn btn-ghost" onClick={() => navigate("/address")}>
+              📍 Address
             </button>
           )}
 

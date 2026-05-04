@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── PAGE ────────────────────────────────────── */
+.ot-page {
+  padding: 32px 0 64px;
+  font-family: "Poppins", sans-serif;
+}
+
+.ot-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  margin-bottom: 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.65);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.ot-back-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateX(-3px); }
+
+.ot-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.ot-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin: 0 0 28px; }
+
+/* ── LAYOUT ──────────────────────────────────── */
+.ot-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) { .ot-layout { grid-template-columns: 1fr; } }
+
+/* ── MAP ─────────────────────────────────────── */
+.ot-map-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.ot-map-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #b3acff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(124,111,255,0.06);
+}
+.ot-map-container { height: 420px; width: 100%; }
+
+/* ── TIMELINE ────────────────────────────────── */
+.ot-timeline-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.ot-timeline-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(124,111,255,0.15);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #b3acff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(124,111,255,0.06);
+}
+.ot-timeline { padding: 20px 18px; display: flex; flex-direction: column; gap: 0; }
+
+.ot-step {
+  display: flex;
+  gap: 14px;
+  position: relative;
+}
+.ot-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  width: 2px;
+  height: calc(100% - 8px);
+  background: rgba(255,255,255,0.08);
+}
+.ot-step.ot-step-done:not(:last-child)::after {
+  background: linear-gradient(to bottom, #7c6fff, rgba(124,111,255,0.3));
+}
+
+.ot-step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+.ot-step-done .ot-step-dot {
+  border-color: #7c6fff;
+  background: linear-gradient(135deg, rgba(124,111,255,0.3), rgba(180,80,255,0.2));
+  box-shadow: 0 0 12px rgba(124,111,255,0.35);
+}
+.ot-step-current .ot-step-dot {
+  border-color: #b450ff;
+  background: linear-gradient(135deg, #7c6fff, #b450ff);
+  box-shadow: 0 0 20px rgba(180,80,255,0.5);
+  transform: scale(1.1);
+}
+
+.ot-step-info { padding: 4px 0 20px; }
+.ot-step-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  margin: 0 0 3px;
+}
+.ot-step-done .ot-step-title,
+.ot-step-current .ot-step-title { color: #ffffff; }
+.ot-step-current .ot-step-title { color: #b3acff; }
+
+.ot-step-desc { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin: 0 0 3px; }
+.ot-step-done .ot-step-desc { color: rgba(255,255,255,0.5); }
+.ot-step-time { font-size: 0.72rem; color: rgba(255,255,255,0.25); }
+.ot-step-done .ot-step-time { color: rgba(255,255,255,0.4); }
+
+/* ── DELIVERY INFO ───────────────────────────── */
+.ot-delivery-card {
+  background: linear-gradient(135deg, rgba(124,111,255,0.1), rgba(180,80,255,0.05));
+  border: 1px solid rgba(124,111,255,0.25);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-top: 14px;
+}
+.ot-delivery-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.83rem;
+}
+.ot-delivery-row:last-child { margin-bottom: 0; }
+.ot-delivery-row span:first-child { color: rgba(255,255,255,0.45); }
+.ot-delivery-row span:last-child { color: #fff; font-weight: 600; }
+.ot-eta { color: #2ecc9a !important; font-size: 1rem !important; font-weight: 800 !important; }

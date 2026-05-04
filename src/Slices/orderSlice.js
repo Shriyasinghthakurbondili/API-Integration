@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const BASE_URL = `${import.meta.env.VITE_API_URL || "https://apis-17.onrender.com"}/api/orderRoutes`
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
+
+// Single source of truth for order URLs
+const ORDERS_URL = `${API_URL}/api/orders`              // GET all / POST
+const ORDER_URL  = (id) => `${API_URL}/api/orders/${id}` // GET by ID
 
 async function safeBody(res) {
   try { return await res.json() }
@@ -16,14 +20,13 @@ function authHeader(token) {
 
 // ─── Thunks ───────────────────────────────────────────────────────────────────
 
-// GET all orders for the logged-in user
 export const fetchOrders = createAsyncThunk(
   "orders/fetch",
   async (_, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      // Try both common route patterns
-      const res = await fetch(`${BASE_URL}/orders`, {
+      console.log("Fetching orders from:", ORDERS_URL)
+      const res = await fetch(ORDERS_URL, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await safeBody(res)
@@ -36,13 +39,12 @@ export const fetchOrders = createAsyncThunk(
   }
 )
 
-// POST — place a new order from cart
 export const placeOrder = createAsyncThunk(
   "orders/place",
   async (orderData, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/orders`, {
+      const res = await fetch(ORDERS_URL, {
         method: "POST",
         headers: authHeader(token),
         body: JSON.stringify(orderData),
@@ -57,20 +59,38 @@ export const placeOrder = createAsyncThunk(
   }
 )
 
-// GET single order by ID
 export const fetchOrderById = createAsyncThunk(
   "orders/fetchById",
   async (id, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      const res = await fetch(`${BASE_URL}/orders/${id}`, {
+      const res = await fetch(ORDER_URL(id), {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await safeBody(res)
+      if (res.status === 404) return null
       if (!res.ok) return rejectWithValue(data.message || "Failed to fetch order")
       return data.order || data.data || data
     } catch (err) {
       return rejectWithValue(err?.message || "Failed to fetch order")
+    }
+  }
+)
+
+export const cancelOrder = createAsyncThunk(
+  "orders/cancel",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth
+      const res = await fetch(`${ORDER_URL(id)}/cancel`, {
+        method: "PATCH",
+        headers: authHeader(token),
+      })
+      const data = await safeBody(res)
+      if (!res.ok) return rejectWithValue(data.message || "Failed to cancel order")
+      return data.order || data.data || { _id: id, status: "cancelled" }
+    } catch (err) {
+      return rejectWithValue(err?.message || "Failed to cancel order")
     }
   }
 )
@@ -87,17 +107,15 @@ const orderSlice = createSlice({
     error: null,
   },
   reducers: {
-    clearOrderError:   (state) => { state.error = null },
-    clearSelectedOrder:(state) => { state.selectedOrder = null },
+    clearOrderError:    (state) => { state.error = null },
+    clearSelectedOrder: (state) => { state.selectedOrder = null },
   },
   extraReducers: (builder) => {
     builder
-      // FETCH ALL
       .addCase(fetchOrders.pending,   (state)         => { state.loading = true;  state.error = null })
       .addCase(fetchOrders.fulfilled, (state, action) => { state.loading = false; state.orders = action.payload })
       .addCase(fetchOrders.rejected,  (state, action) => { state.loading = false; state.error = action.payload })
 
-      // PLACE ORDER
       .addCase(placeOrder.pending,    (state)         => { state.actionLoading = true;  state.error = null })
       .addCase(placeOrder.fulfilled,  (state, action) => {
         state.actionLoading = false
@@ -105,10 +123,23 @@ const orderSlice = createSlice({
       })
       .addCase(placeOrder.rejected,   (state, action) => { state.actionLoading = false; state.error = action.payload })
 
-      // FETCH BY ID
       .addCase(fetchOrderById.pending,   (state)         => { state.loading = true;  state.error = null })
       .addCase(fetchOrderById.fulfilled, (state, action) => { state.loading = false; state.selectedOrder = action.payload })
       .addCase(fetchOrderById.rejected,  (state, action) => { state.loading = false; state.error = action.payload })
+
+      .addCase(cancelOrder.pending,   (state)         => { state.actionLoading = true;  state.error = null })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.actionLoading = false
+        const updated = action.payload
+        // Update in orders list
+        const idx = state.orders.findIndex((o) => o._id === updated._id)
+        if (idx !== -1) state.orders[idx] = { ...state.orders[idx], ...updated }
+        // Update selectedOrder
+        if (state.selectedOrder?._id === updated._id) {
+          state.selectedOrder = { ...state.selectedOrder, ...updated }
+        }
+      })
+      .addCase(cancelOrder.rejected,  (state, action) => { state.actionLoading = false; state.error = action.payload })
   },
 })
 
