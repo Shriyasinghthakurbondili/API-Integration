@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LuxeShop 🛍️
 
 A full-stack e-commerce web application built with React, Node.js, MongoDB, and Razorpay payments.
@@ -377,3 +378,6 @@ All routes except `/` (SignUp) and `/login` are protected. If no JWT token is fo
 ## License
 
 MIT
+=======
+# API-Integration
+>>>>>>> 906294b48bef822b98ae4af6700eea815f8be405
