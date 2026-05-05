@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { toast, Toaster } from "react-hot-toast"
 import { registerUser } from '../Slices/authSlice'
 import { useNavigate } from "react-router-dom"
-import "./Signup.css"
+import "./SignUp.css"
 
 const SignUp = () => {
   const dispatch = useDispatch()
