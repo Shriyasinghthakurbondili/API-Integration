@@ -62,9 +62,13 @@ const GetSingleProducts = () => {
     )
   }
 
-  const handleAddToCart = () => {
-    dispatch(addToCart({ productId: singleProduct._id, quantity: 1 }))
-    toast.success("Added to cart 🛒")
+  const handleAddToCart = async () => {
+    try {
+      await dispatch(addToCart({ productId: singleProduct._id, quantity: 1 })).unwrap()
+      toast.success("Added to cart 🛒")
+    } catch (err) {
+      toast.error(err?.message || err || "Failed to add to cart")
+    }
   }
 
   return (

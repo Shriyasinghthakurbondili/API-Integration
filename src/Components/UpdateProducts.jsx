@@ -85,20 +85,20 @@ const UpdateProduct = ({ product }) => {
 
               {/* Image upload */}
               <label className="up-upload-zone" htmlFor="up-file-input">
-                {(preview || getPreview()) ? (
+                {preview ? (
                   <>
                     <img
-                      src={preview || getPreview()}
+                      src={preview}
                       alt="preview"
                       className="up-preview"
-                      onError={(e) => { e.target.style.display = "none" }}
+                      style={{ display: "block" }}
                     />
                     <div className="up-upload-overlay">🖼️ Change image</div>
                   </>
                 ) : (
                   <div className="up-upload-placeholder">
                     <span className="up-upload-icon">🖼️</span>
-                    <span className="up-upload-label">Click to change image</span>
+                    <span className="up-upload-label">Click to upload new image</span>
                   </div>
                 )}
                 <input

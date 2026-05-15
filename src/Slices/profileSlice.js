@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const BASE_URL = `${import.meta.env.VITE_API_URL || "https://apis-17.onrender.com"}/api/userRoutes`
+const BASE_URL = `${import.meta.env.VITE_API_URL || "https://blog-apis-6x3t.onrender.com"}/api/userRoutes`
 
 async function safeBody(res) {
   try { return await res.json() }

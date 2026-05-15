@@ -39,12 +39,32 @@ const Cart = () => {
     dispatch(fetchAddresses())
   }, [dispatch])
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = items.length > 0 ? 99 : 0
+  // Auto-remove invalid cart items (unpopulated products: no valid ID or price = 0)
+  useEffect(() => {
+    if (loading || items.length === 0) return
+    const invalidItems = items.filter((item) => {
+      const id = item.productId
+      const isValidId = id && typeof id === "string" && id.length === 24 && /^[a-f0-9]{24}$/i.test(id)
+      return !isValidId || item.price === 0
+    })
+    if (invalidItems.length > 0) {
+      invalidItems.forEach((item) => dispatch(removeFromCart(item.productId)))
+      toast(`Removed ${invalidItems.length} invalid item${invalidItems.length > 1 ? "s" : ""} from cart`, { icon: "🗑️" })
+    }
+  }, [items, loading])
+
+  // Valid items only — filter out ghost/unpopulated products
+  const validCartItems = items.filter((item) => {
+    const id = item.productId
+    return id && typeof id === "string" && id.length === 24 && /^[a-f0-9]{24}$/i.test(id) && item.price > 0
+  })
+
+  const subtotal = validCartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shipping = validCartItems.length > 0 ? 99 : 0
   const total    = subtotal + shipping - discount
 
-  // Items where quantity exceeds available stock
-  const outOfStockItems = items.filter((item) => item.quantity > item.stock)
+  // Items where quantity exceeds available stock (only when stock is known > 0)
+  const outOfStockItems = validCartItems.filter((item) => item.stock > 0 && item.quantity > item.stock)
   const hasStockIssue   = outOfStockItems.length > 0
 
   // Demo coupons — replace with real backend validation
@@ -84,10 +104,23 @@ const Cart = () => {
       return
     }
 
+    // Guard — filter out invalid items (unpopulated products with no ID or price 0)
+    const validItems = validCartItems
+
+    if (validItems.length === 0) {
+      toast.error("No valid items in cart. Please remove invalid items and try again.")
+      return
+    }
+
+    if (validItems.length < items.length) {
+      const invalidCount = items.length - validItems.length
+      toast(`${invalidCount} invalid item${invalidCount > 1 ? "s" : ""} skipped`, { icon: "⚠️" })
+    }
+
     try {
       // STEP 1 — Create an order in the database first
       const orderPayload = {
-        items: items.map((item) => ({
+        items: validItems.map((item) => ({
           product:  item.productId,   // backend expects "product" key
           quantity: item.quantity,
         })),
@@ -117,6 +150,9 @@ const Cart = () => {
       const msg = err?.message || String(err) || "Payment failed"
       if (msg.toLowerCase().includes("cancel")) {
         toast.error("Payment cancelled")
+      } else if (msg.toLowerCase().includes("insufficient stock") || msg.toLowerCase().includes("stock")) {
+        // Extract product name from error if possible
+        toast.error(`${msg}. Please remove this item or reduce quantity.`, { duration: 5000 })
       } else {
         toast.error(msg)
       }
@@ -166,7 +202,7 @@ const Cart = () => {
 
               {/* LEFT — ITEMS */}
               <div className="cart-items">
-                {items.map((item) => (
+                {validCartItems.map((item) => (
                   <div key={item.productId} className="cart-item">
 
                     {/* IMAGE */}
@@ -187,11 +223,6 @@ const Cart = () => {
                       <div className="cart-item-price">
                         ₹ {(item.price * item.quantity).toLocaleString()}
                       </div>
-                      {item.stock === 0 && (
-                        <span style={{ fontSize: "0.72rem", color: "#ff4d6d", fontWeight: 600 }}>
-                          ❌ Out of stock
-                        </span>
-                      )}
                       {item.stock > 0 && item.quantity > item.stock && (
                         <span style={{ fontSize: "0.72rem", color: "#ff8fa3", fontWeight: 600 }}>
                           ⚠️ Only {item.stock} in stock
@@ -210,7 +241,7 @@ const Cart = () => {
                         <span className="qty-value">{item.quantity}</span>
                         <button
                           className="qty-btn"
-                          disabled={!!loadingItems[item.productId] || item.quantity >= item.stock}
+                          disabled={!!loadingItems[item.productId] || (item.stock > 0 && item.quantity >= item.stock)}
                           onClick={() => dispatch(incrementQuantity(item.productId))}
                         >+</button>
                       </div>
@@ -259,7 +290,7 @@ const Cart = () => {
                 <h3 className="cart-summary-title">Order Summary</h3>
 
                 <div className="summary-row">
-                  <span>Subtotal ({items.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                  <span>Subtotal ({validCartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
                   <span>₹ {subtotal.toLocaleString()}</span>
                 </div>
 

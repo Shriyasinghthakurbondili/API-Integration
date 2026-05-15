@@ -297,9 +297,13 @@ const GetAllProducts = () => {
                 <button
                   className="btn-add-cart"
                   disabled={actionLoading}
-                  onClick={() => {
-                    dispatch(addToCart({ productId: product._id, quantity: 1 }))
-                    toast.success("Added to cart 🛒")
+                  onClick={async () => {
+                    try {
+                      await dispatch(addToCart({ productId: product._id, quantity: 1 })).unwrap()
+                      toast.success("Added to cart 🛒")
+                    } catch (err) {
+                      toast.error(err?.message || err || "Failed to add to cart")
+                    }
                   }}
                 >
                   🛒 Add to Cart

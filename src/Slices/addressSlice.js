@@ -22,7 +22,7 @@ export const fetchAddresses = createAsyncThunk(
   "address/fetchAll",
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getState().auth.token || localStorage.getItem("token")
       const res = await fetch(ADDRESS_URL, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -39,11 +39,21 @@ export const addAddress = createAsyncThunk(
   "address/add",
   async (addressData, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getState().auth.token || localStorage.getItem("token")
+      // Map frontend field names to backend field names exactly
+      const payload = {
+        fullName:   addressData.name,
+        phone:      addressData.phone,
+        street:     addressData.line1,
+        city:       addressData.city,
+        state:      addressData.state,
+        postalCode: addressData.pincode,
+        country:    addressData.country || "India",
+      }
       const res = await fetch(ADDRESS_URL, {
         method: "POST",
         headers: authHeader(token),
-        body: JSON.stringify(addressData),
+        body: JSON.stringify(payload),
       })
       const data = await safeBody(res)
       if (!res.ok) return rejectWithValue(data.message || "Failed to add address")
@@ -116,12 +126,15 @@ export const setDefaultAddress = createAsyncThunk(
 
 // ─── Slice ────────────────────────────────────────────────────────────────────
 
-// Normalize address from backend (_id → id)
+// Normalize address from backend (_id → id, backend fields → frontend fields)
 function normalize(addr) {
   if (!addr) return addr
   return {
     ...addr,
-    id: addr._id || addr.id,
+    id:      addr._id || addr.id,
+    name:    addr.fullName || addr.name,
+    line1:   addr.street   || addr.line1,
+    pincode: addr.postalCode || addr.pincode,
   }
 }
 

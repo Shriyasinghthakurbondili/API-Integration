@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
 const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://blog-apis-6x3t.onrender.com"
+  import.meta.env.VITE_API_URL || "http://localhost:3000"
 
 function decodeJwt(token) {
   try {

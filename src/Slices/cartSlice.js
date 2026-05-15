@@ -17,9 +17,15 @@ function authHeader(token) {
   }
 }
 
+// Always get the freshest token — Redux state first, localStorage fallback
+function getToken(getState) {
+  return getState().auth.token || localStorage.getItem("token") || null
+}
+
 async function refetchCart(token) {
+  const t = token || localStorage.getItem("token")
   const res = await fetch(CART_URL, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${t}` },
   })
   const data = await safeBody(res)
   if (!res.ok) throw new Error(data.message || "Failed to fetch cart")
@@ -44,20 +50,18 @@ export const fetchCart = createAsyncThunk(
   "cart/fetch",
   async (_, { getState, rejectWithValue }) => {
     try {
-      return await refetchCart(getState().auth.token)
+      return await refetchCart(getToken(getState))
     } catch (err) {
       return rejectWithValue(err?.message || "Failed to fetch cart")
     }
   }
 )
 
-// Backend: POST /api/cart  { productId, quantity }
-// existingItem.quantity += quantity  →  always adds to existing qty
 export const addToCart = createAsyncThunk(
   "cart/add",
   async ({ productId, quantity = 1 }, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getToken(getState)
       const res = await fetch(CART_URL, {
         method: "POST",
         headers: authHeader(token),
@@ -72,12 +76,11 @@ export const addToCart = createAsyncThunk(
   }
 )
 
-// Backend: DELETE /api/cart/:productId  (id in URL params)
 export const removeFromCart = createAsyncThunk(
   "cart/remove",
   async (productId, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getToken(getState)
       const res = await fetch(CART_REMOVE_URL(productId), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
@@ -91,12 +94,11 @@ export const removeFromCart = createAsyncThunk(
   }
 )
 
-// Backend does += quantity, so sending quantity: 1 adds exactly 1
 export const incrementQuantity = createAsyncThunk(
   "cart/increment",
   async (productId, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getToken(getState)
       const res = await fetch(CART_URL, {
         method: "POST",
         headers: authHeader(token),
@@ -111,19 +113,16 @@ export const incrementQuantity = createAsyncThunk(
   }
 )
 
-// Backend does += quantity, so sending quantity: -1 decrements by 1
-// If already at 1, remove the item entirely instead
 export const decrementQuantity = createAsyncThunk(
   "cart/decrement",
   async (productId, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getToken(getState)
       const { items } = getState().cart
       const item = items.find((i) => i.productId === productId)
       const currentQty = item?.quantity || 1
 
       if (currentQty <= 1) {
-        // Remove item entirely
         const res = await fetch(CART_REMOVE_URL(productId), {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -133,7 +132,6 @@ export const decrementQuantity = createAsyncThunk(
         return await refetchCart(token)
       }
 
-      // Decrement by 1 using negative quantity
       const res = await fetch(CART_URL, {
         method: "POST",
         headers: authHeader(token),
@@ -152,7 +150,7 @@ export const clearCart = createAsyncThunk(
   "cart/clear",
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getToken(getState)
       const res = await fetch(CART_URL, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
