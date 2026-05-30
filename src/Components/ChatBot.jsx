@@ -1,3 +1,4 @@
+import axios from "axios"
 import { useState, useRef, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -137,7 +138,7 @@ const ChatBot = () => {
     if (open) setUnread(0)
   }, [open])
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     const userText = text || input.trim()
     if (!userText) return
     setInput("")
@@ -147,27 +148,39 @@ const ChatBot = () => {
     setTyping(true)
     setQuickReplies([])
 
-    setTimeout(() => {
-      const reply = getBotReply(userText, userName)
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/ai/chat`,
+        { question: userText },
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      )
+
       setTyping(false)
-
-      // Handle navigation actions
-      if (reply.action === "orders") {
-        setTimeout(() => navigate("/orders"), 1200)
-      }
-      if (userText.toLowerCase().includes("go to orders")) {
-        navigate("/orders")
-      }
-      if (userText.toLowerCase().includes("shop now")) {
-        navigate("/home")
-      }
-
       setMessages((prev) => [
         ...prev,
-        { id: Date.now() + 1, role: "bot", text: reply.text, time: now() },
+        {
+          id:   Date.now() + 1,
+          role: "bot",
+          text: response.data.answer,
+          time: now(),
+        },
       ])
-      setQuickReplies(reply.quick || [])
-    }, 900 + Math.random() * 600)
+      setQuickReplies(["Track my order", "Return policy", "Payment help", "Contact support"])
+
+    } catch {
+      setTyping(false)
+      setMessages((prev) => [
+        ...prev,
+        {
+          id:   Date.now() + 1,
+          role: "bot",
+          text: "Sorry, AI service is currently unavailable. 😔",
+          time: now(),
+        },
+      ])
+      setQuickReplies(["Track my order", "Return policy", "Contact support"])
+    }
   }
 
   const handleKey = (e) => {
